@@ -117,6 +117,7 @@ function getObjetById($id) {
   $result = mysqli_query(getdataBase(), $sql);
   return mysqli_fetch_assoc($result);
 }
+
 function getImagesObjet($idObjet) {
   $idObjet = intval($idObjet);
   $sql = "SELECT nom_image FROM vue_images_objet WHERE id_objet = $idObjet";
@@ -128,6 +129,7 @@ function getImagesObjet($idObjet) {
   }
   return $images;
 }
+
 function getHistoriqueEmprunts($idObjet) {
   $idObjet = intval($idObjet);
   $sql = "SELECT nom_membre, date_emprunt, date_retour 
@@ -142,4 +144,23 @@ function getHistoriqueEmprunts($idObjet) {
   }
   return $historique;
 }
+
+function getMembreById($idMembre) {
+    $conn = getdatabase();
+    $id = (int)$idMembre;
+
+    $sql = "SELECT * FROM gestion_emprunt_membre WHERE id_membre = $id LIMIT 1";
+    $res = mysqli_query($conn, $sql);
+
+    if ($res && mysqli_num_rows($res) > 0) {
+        return mysqli_fetch_assoc($res);
+    }
+    return null;
+}
+
+function getMembre_fiche($idMembre) {
+    $requete = "SELECT * FROM vue_membre_objet_emprunt WHERE id_membre = $idMembre";
+    $res = mysqli_query(getdataBase(), $requete);
+}
+
 ?>
