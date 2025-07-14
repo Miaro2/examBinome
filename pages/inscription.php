@@ -1,6 +1,5 @@
 <?php
 session_start();
-require('../inc/functions.php');
 ?>
 <!DOCTYPE html>
 <html lang="fr">

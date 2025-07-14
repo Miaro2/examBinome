@@ -1,7 +1,3 @@
--- Créer la base
-CREATE DATABASE IF NOT EXISTS gestion_emprunt;
-USE gestion_emprunt;
-
 -- Table membre
 CREATE TABLE gestion_emprunt_membre (
     id_membre INT AUTO_INCREMENT PRIMARY KEY,
