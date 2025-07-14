@@ -9,7 +9,6 @@ function connection($mail, $mdp){
     $donne = mysqli_fetch_assoc($resultat);
 
     if ($donne) {
-        $_SESSION['id'] = $donne['id_membre'];
         $_SESSION['nom'] = $donne['nom'];
         $_SESSION['mail'] = $donne['email'];
         $_SESSION['ddn'] = $donne['date_naissance'];
@@ -71,46 +70,6 @@ function getCategories() {
     return $categories;
 }
 
-function createObjet($nomObjet, $idCategorie, $idMembre) {
-    $conn = getdatabase();
-
-    $requeteObjet = "INSERT INTO gestion_emprunt_objet (nom_objet, id_categorie, id_membre) VALUES ('%s', %d, %d)";
-    $requeteObjet = sprintf($requeteObjet, mysqli_real_escape_string($conn, $nomObjet), intval($idCategorie), intval($idMembre));
-    
-    if (!mysqli_query($conn, $requeteObjet)) {
-        return false;
-    }
-
-    $idObjet = mysqli_insert_id($conn);
-
-    $dateEmprunt = date('Y-m-d H:i:s');  // date actuelle, ou NULL si tu veux
-    $dateRetour = NULL; // ou une date prévue
-
-    $requeteEmprunt = "INSERT INTO gestion_emprunt_emprunt (id_objet, id_membre, date_emprunt, date_retour) VALUES (%d, %d, '%s', %s)";
-    $dateRetourSql = $dateRetour === null ? "NULL" : "'".$dateRetour."'";
-
-    $requeteEmprunt = sprintf($requeteEmprunt, intval($idObjet), intval($idMembre), $dateEmprunt, $dateRetourSql);
-
-    if (!mysqli_query($conn, $requeteEmprunt)) {
-        mysqli_query($conn, "DELETE FROM gestion_emprunt_objet WHERE id_objet = $idObjet");
-        return false;
-    }
-
-    return $idObjet;
-}
-
-function createImageObjet($id_objet, $nom_image) {
-    $db = getdatabase();
-    $nom_image = mysqli_real_escape_string($db, $nom_image);
-
-    $requete = "INSERT INTO gestion_emprunt_images_objet (id_objet, nom_image) VALUES (%s, '%s')";
-    $requete = sprintf($requete, $id_objet, $nom_image);
-
-    $result = mysqli_query($db, $requete);
-    return $result;
-}
-
-
 function getObjetById($id) {
   $id = intval($id);
   $sql = "SELECT * FROM vue_objet_details WHERE id_objet = $id";
@@ -142,4 +101,9 @@ function getHistoriqueEmprunts($idObjet) {
   }
   return $historique;
 }
+
+
+
+
+
 ?>
