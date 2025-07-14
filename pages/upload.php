@@ -20,26 +20,25 @@ if (!is_dir($uploadDir)) {
     mkdir($uploadDir, 0775, true);
 }
 
-//  CAS A : Aucun fichier uploadé => image par défaut
-if (
-    !isset($_FILES['fichier']) ||
-    $_FILES['fichier']['error'] === UPLOAD_ERR_NO_FILE ||
-    empty($_FILES['fichier']['name'])
-) {
+// Si aucun fichier, mettre une image par défaut
+if (!isset($_FILES['fichier']) || $_FILES['fichier']['error'] === UPLOAD_ERR_NO_FILE) {
     $originalName = "objet_defaut";
-    $newName = "defaut.png";
+    $newName = "default.jpeg";
 
+    // Crée l'objet en BDD
     $id_objet = createObjet($originalName, $id_categorie, $id_user);
     if ($id_objet) {
         createImageObjet($id_objet, $newName);
-        echo " Objet créé avec image par défaut.<br>";
+        // ✅ Redirige vers accueil.php
+        header("Location: accueil.php");
+        exit;
     } else {
         echo "Erreur lors de la création de l'objet.";
     }
     exit;
 }
 
-//  CAS B : Fichier présent
+// Vérifie méthode POST + fichier présent
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fichier'])) {
     $file = $_FILES['fichier'];
 
@@ -60,25 +59,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fichier'])) {
         die('Type de fichier non autorisé : ' . $mime);
     }
 
-    // Nettoyage nom + nom unique
+    // Nettoyage du nom et renommage
     $originalName = pathinfo($file['name'], PATHINFO_FILENAME);
-    $originalName = preg_replace('/[^a-zA-Z0-9_-]/', '_', $originalName);
     $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
     $newName = $originalName . '_' . uniqid() . '.' . $extension;
 
-    // Déplace le fichier
-    $destination = $uploadDir . $newName;
-
-    if (move_uploaded_file($file['tmp_name'], $destination)) {
-        chmod($destination, 0644);
-        echo " Fichier uploadé avec succès : " . $newName . "<br>";
-
+    // Déplacement du fichier
+    if (move_uploaded_file($file['tmp_name'], $uploadDir . $newName)) {
+        // Crée l'objet
         $id_objet = createObjet($originalName, $id_categorie, $id_user);
+
         if ($id_objet) {
             createImageObjet($id_objet, $newName);
-            echo " Objet créé.<br>";
-            echo "Nom objet : $originalName<br>";
-            echo "Image enregistrée : $newName<br>";
+            // ✅ Redirige vers accueil.php après succès
+            header("Location: accueil.php");
+            exit;
         } else {
             echo "Erreur lors de la création de l'objet.";
         }

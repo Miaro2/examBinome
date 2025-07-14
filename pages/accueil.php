@@ -14,9 +14,17 @@ $categories = getCategories();
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Emprunte Moi - Liste des objets</title>
-  <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    .modal-header {
+      border-bottom: none;
+    }
+    .modal-footer {
+      border-top: none;
+    }
+  </style>
 </head>
 <body class="bg-secondary bg-opacity-10">
 
@@ -36,6 +44,53 @@ $categories = getCategories();
   </header>
 
   <main class="container mb-5">
+
+    <!-- Bouton pour ouvrir le modal -->
+    <div class="text-end mb-4">
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajoutObjetModal">
+        + Ajouter un objet
+      </button>
+    </div>
+
+    <!-- Modal Bootstrap -->
+    <div class="modal fade" id="ajoutObjetModal" tabindex="-1" aria-labelledby="ajoutObjetModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h5 class="modal-title" id="ajoutObjetModalLabel">Publier une photo</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fermer"></button>
+          </div>
+
+          <form action="upload.php" method="post" enctype="multipart/form-data">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="fichier" class="form-label">Choisir une image</label>
+                <input type="file" class="form-control" id="fichier" name="fichier" accept="image/jpeg,image/png" />
+              </div>
+
+              <div class="mb-3">
+                <label for="categorie_nouvelle_objet" class="form-label">Catégorie</label>
+                <select name="categorie_nouvelle_objet" id="categorie_nouvelle_objet" class="form-select" required>
+                  <?php foreach ($categories as $cat): ?>
+                    <option value="<?= $cat['id_categorie'] ?>" <?= ($idCategorie == $cat['id_categorie']) ? 'selected' : '' ?>>
+                      <?= htmlspecialchars($cat['nom_categorie']) ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="submit" class="btn btn-primary">Uploader</button>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+
     <h1 class="mb-4 text-center">Liste des objets</h1>
 
     <section>
