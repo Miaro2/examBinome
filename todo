@@ -1,7 +1,6 @@
-Creation de database 
-    inserer table
-
-Fonction pour connecter DDB
-
-Cree login et inscription
-    Fonction pour voir dans la databse
+Tables en BDD + données de test 
+Login : formulaire 
+Inscription : formulaire 
+Session pour stocker user
+Liste des objets : nom, emprunteur, date retour 
+Filtre par catégorie   
