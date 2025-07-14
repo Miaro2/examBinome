@@ -146,3 +146,28 @@ LEFT JOIN
     gestion_emprunt_emprunt e ON o.id_objet = e.id_objet
 LEFT JOIN 
     gestion_emprunt_membre m ON e.id_membre = m.id_membre;
+
+CREATE OR REPLACE VIEW vue_objet_details AS
+SELECT 
+    o.id_objet,
+    o.nom_objet,
+    o.id_categorie,
+    c.nom_categorie
+FROM gestion_emprunt_objet o
+LEFT JOIN gestion_emprunt_categorie_objet c ON o.id_categorie = c.id_categorie;
+
+CREATE OR REPLACE VIEW vue_images_objet AS
+SELECT 
+    id_objet,
+    nom_image
+FROM gestion_emprunt_images_objet;
+
+CREATE OR REPLACE VIEW vue_historique_emprunts AS
+SELECT 
+    e.id_objet,
+    m.nom AS nom_membre,
+    e.date_emprunt,
+    e.date_retour
+FROM gestion_emprunt_emprunt e
+JOIN gestion_emprunt_membre m ON e.id_membre = m.id_membre;
+
