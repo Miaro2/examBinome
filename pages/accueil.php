@@ -27,7 +27,7 @@ $categories = getCategories();
         <div class="collapse navbar-collapse justify-content-end">
           <ul class="navbar-nav">
             <li class="nav-item">
-              <span class="nav-link text-light">Bienvenue <?= htmlspecialchars($nom) ?></span>
+              <span class="nav-link text-light">Bienvenue <?= $nom ?></span>
             </li>
           </ul>
         </div>
@@ -45,7 +45,7 @@ $categories = getCategories();
             <option value="">-- Toutes les catégories --</option>
             <?php foreach ($categories as $cat): ?>
               <option value="<?= $cat['id_categorie'] ?>" <?= ($idCategorie == $cat['id_categorie']) ? 'selected' : '' ?>>
-                <?= htmlspecialchars($cat['nom_categorie']) ?>
+                <?= $cat['nom_categorie'] ?>
               </option>
             <?php endforeach; ?>
           </select>
@@ -77,10 +77,10 @@ $categories = getCategories();
                 }
               ?>
               <tr>
-                <td><?= htmlspecialchars($objet['nom_objet']) ?></td>
-                <td><?= htmlspecialchars($objet['nom_membre']) ?></td>
-                <td><?= htmlspecialchars($objet['date_emprunt']) ?></td>
-                <td><?= htmlspecialchars($objet['date_retour']) ?></td>
+                <td><a href="fiche.php?id=<?= $objet['id_objet'] ?>"><?= $objet['nom_objet'] ?></a></td>
+                <td><?= $objet['nom_membre'] ?></td>
+                <td><?= $objet['date_emprunt'] ?></td>
+                <td><?= $objet['date_retour'] ?></td>
               </tr>
             <?php endforeach; ?>
           <?php else: ?>

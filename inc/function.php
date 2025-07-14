@@ -69,4 +69,41 @@ function getCategories() {
     }
     return $categories;
 }
+
+function getObjetById($id) {
+  $id = intval($id);
+  $sql = "SELECT * FROM vue_objet_details WHERE id_objet = $id";
+  $result = mysqli_query(getdataBase(), $sql);
+  return mysqli_fetch_assoc($result);
+}
+function getImagesObjet($idObjet) {
+  $idObjet = intval($idObjet);
+  $sql = "SELECT nom_image FROM vue_images_objet WHERE id_objet = $idObjet";
+  $result = mysqli_query(getdataBase(), $sql);
+  
+  $images = [];
+  while ($row = mysqli_fetch_assoc($result)) {
+    $images[] = $row;
+  }
+  return $images;
+}
+function getHistoriqueEmprunts($idObjet) {
+  $idObjet = intval($idObjet);
+  $sql = "SELECT nom_membre, date_emprunt, date_retour 
+          FROM vue_historique_emprunts 
+          WHERE id_objet = $idObjet 
+          ORDER BY date_emprunt DESC";
+  $result = mysqli_query(getdataBase(), $sql);
+  
+  $historique = [];
+  while ($row = mysqli_fetch_assoc($result)) {
+    $historique[] = $row;
+  }
+  return $historique;
+}
+
+
+
+
+
 ?>
