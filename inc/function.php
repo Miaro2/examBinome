@@ -41,4 +41,15 @@ function create_compte($nom, $mail, $mdp, $date, $genre, $ville) {
 
     header("Location: ../pages/inscription.php");
 }
+
+function getObjet() {
+    $requete = "SELECT * FROM v_objets_emprunt";
+
+    $resultat = mysqli_query(getdataBase(), $requete);
+    $objets = [];
+    while ($donne = mysqli_fetch_assoc($resultat)) {
+        $objets[] = $donne;
+    }
+    return $objets;
+}
 ?>

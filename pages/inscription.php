@@ -39,5 +39,6 @@ session_start();
                 <input type="submit" value="Validez" id="submit">
         </form>
 
+        <script src="../assets/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
