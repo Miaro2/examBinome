@@ -3,45 +3,84 @@ session_start();
 require('../inc/function.php');
 require('../inc/connection.php');
 
-$getObjet = getObjet();
+$nom = $_SESSION['nom'] ?? '';
+
+$idCategorie = isset($_GET['categorie']) ? intval($_GET['categorie']) : null;
+$getObjet = getObjet($idCategorie);
+
+$categories = getCategories();
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Emprunte Moi - Liste des objets</title>
+  <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
 </head>
-<body>
-    <h1>Liste des objets empruntés</h1>
+<body class="bg-secondary bg-opacity-10">
 
-    <table border="1" cellpadding="10">
-        <thead>
-            <tr>
-                <th>Nom Objet</th>
-                <th>Nom Membre</th>
-                <th>Date Emprunt</th>
-                <th>Date Retour</th>
-            </tr>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Emprunte Moi</a>
+    </div>
+  </nav>
+
+  <h1>Bienvenue <?= $nom ?></h1>
+
+  <div class="container">
+    <h1 class="mb-4 text-center">Liste des objets</h1>
+
+    <!-- Filtre par catégorie -->
+    <form method="get" class="row mb-4">
+      <div class="col-md-6">
+        <select name="categorie" class="form-select">
+          <option value="">-- Toutes les catégories --</option>
+          <?php foreach ($categories as $cat): ?>
+            <option value="<?= $cat['id_categorie'] ?>" <?= $idCategorie == $cat['id_categorie'] ? 'selected' : '' ?>>
+              <?= $cat['nom_categorie'] ?>
+            </option>
+          <?php endforeach; ?>
+        </select>
+      </div>
+      <div class="col-md-2">
+        <button type="submit" class="btn btn-dark w-100">Filtrer</button>
+      </div>
+    </form>
+
+    <!-- Tableau -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+          <tr>
+            <th>Nom Objet</th>
+            <th>Nom Membre</th>
+            <th>Date Emprunt</th>
+            <th>Date Retour</th>
+          </tr>
         </thead>
         <tbody>
-            <?php foreach ($getObjet as $objet): ?>
-                <?php if (!isset($objet['nom_membre'])) {
-                    $objet['nom_membre'] = '-----';
-                    $objet['date_emprunt'] = '-----';
-                    $objet['date_retour'] = '-----';
-                }?>
-                <tr>
-                    <td><?= $objet['nom_objet'] ?></td>
-                    <td><?= $objet['nom_membre'] ?></td>
-                    <td><?= $objet['date_emprunt'] ?></td>
-                    <td><?= $objet['date_retour'] ?></td>
-                </tr>
-            <?php endforeach; ?>
+          <?php foreach ($getObjet as $objet): ?>
+            <?php
+              if (!isset($objet['nom_membre'])) {
+                  $objet['nom_membre'] = '-----';
+                  $objet['date_emprunt'] = '-----';
+                  $objet['date_retour'] = '-----';
+              }
+            ?>
+            <tr>
+              <td><?= $objet['nom_objet'] ?></td>
+              <td><?= $objet['nom_membre'] ?></td>
+              <td><?= $objet['date_emprunt'] ?></td>
+              <td><?= $objet['date_retour'] ?></td>
+            </tr>
+          <?php endforeach; ?>
         </tbody>
-    </table>
+      </table>
+    </div>
+  </div>
 
-    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

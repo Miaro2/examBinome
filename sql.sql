@@ -137,9 +137,10 @@ INSERT INTO gestion_emprunt_emprunt (id_objet, id_membre, date_emprunt, date_ret
 
 CREATE OR REPLACE VIEW v_objets_emprunt AS 
 SELECT 
-    o.id_objet, 
-    o.nom_objet, 
-    e.date_emprunt, 
+    o.id_objet,
+    o.nom_objet,
+    o.id_categorie,
+    e.date_emprunt,
     e.date_retour,
     e.id_membre,
     m.nom AS nom_membre

@@ -9,14 +9,19 @@ function connection($mail, $mdp){
     $donne = mysqli_fetch_assoc($resultat);
 
     if ($donne) {
-        $_SESSION['nom'] = $donne['Nom'];
-        $_SESSION['mail'] = $donne['Email'];
-        $_SESSION['ddn'] = $donne['Date_De_Naissance'];
-        $_SESSION['IdMembre'] = $donne['IdMembre'];
+        $_SESSION['nom'] = $donne['nom'];
+        $_SESSION['mail'] = $donne['email'];
+        $_SESSION['ddn'] = $donne['date_naissance'];
+        $_SESSION['IdMembre'] = $donne['id_membre'];
+        $_SESSION['genre'] = $donne['genre'];
+        $_SESSION['ville'] = $donne['ville'];
+        $_SESSION['image'] = $donne['image_profil'] ?? 'default.png';
         header("Location: ../pages/accueil.php");
+        exit;
     } else {
         $_SESSION['error'] = "Erreur de connexion";
         header("Location: ../pages/login.php");
+        exit;
     }
 }
 
@@ -42,14 +47,26 @@ function create_compte($nom, $mail, $mdp, $date, $genre, $ville) {
     header("Location: ../pages/inscription.php");
 }
 
-function getObjet() {
+function getObjet($idCategorie = null) {
     $requete = "SELECT * FROM v_objets_emprunt";
-
+    if ($idCategorie) {
+        $requete .= " WHERE id_categorie = " . intval($idCategorie);
+    }
     $resultat = mysqli_query(getdataBase(), $requete);
     $objets = [];
     while ($donne = mysqli_fetch_assoc($resultat)) {
         $objets[] = $donne;
     }
     return $objets;
+}
+
+function getCategories() {
+    $requete = "SELECT * FROM gestion_emprunt_categorie_objet";
+    $resultat = mysqli_query(getdataBase(), $requete);
+    $categories = [];
+    while ($donne = mysqli_fetch_assoc($resultat)) {
+        $categories[] = $donne;
+    }
+    return $categories;
 }
 ?>
